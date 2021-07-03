@@ -1,7 +1,7 @@
-export function RestartButton(props) {
+export function RestartButton({gameData, onClick}) {
   return <div className="lost">
-    <div>You lost... Round: {props.gameData.round}</div>
-    <div>Your score: {props.gameData.score}</div>
-    <button onClick={props.onClick}>Restart</button>
+    <div>You lost... </div>
+    <div>Your score: {gameData.score}</div>
+    <button onClick={onClick}>Restart</button>
   </div>;
 }

@@ -1,4 +1,5 @@
 import './App.css'
+import * as _ from "lodash";
 import {useEffect, useState} from "react"
 import ColorCard from "./components/ColorCard"
 import wait from "./utils/utils"
@@ -84,7 +85,7 @@ function App() {
       const nextColorToGuess = remainingColorsToGuess.shift()
       // if user picked to right color
       if (guessedColor === nextColorToGuess) {
-        gameData.score += 10
+
         // and user has more colors to guess
         if (remainingColorsToGuess.length) {
           // continue round with remaining colors
@@ -92,6 +93,7 @@ function App() {
         }
         // else - round is finished successfully
         else {
+          gameData.score += 10
           setGameData({
             ...gameData,
             isFlashing: true,
@@ -133,9 +135,13 @@ function App() {
   return (
     <div className="game-container">
       <div className="score-table">
-        {playersData.map(({score, name, id}) => (
-          <Score key={id} name={name} score={score}/>
-        ))}
+        {
+          _.orderBy(playersData, ["score"], ["desc"]).map(
+            ({score, name, id}) => (
+              <Score key={id} name={name} score={score}/>
+            )
+          )
+        }
       </div>
       <GameMessage simonTurn={isSimonTurn} playerTurn={isPlayerTurn} isGameOver={isGameOver}/>
       <div className="colors-container">
