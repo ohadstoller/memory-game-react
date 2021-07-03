@@ -1,8 +1,11 @@
 import './App.css';
 import {useEffect, useState} from "react";
 import ColorCard from "./components/ColorCard";
-import wait, {colorList} from "./utils/utils";
-import {initGameData} from "./utils/utils";
+import wait, {colorList, initGameData} from "./utils/utils";
+import {StartButton} from "./components/StartButton";
+import {Restart} from "./components/Restart";
+import {GameMessage} from "./components/GameMessage";
+import {RoundNumber} from "./components/RoundNumber";
 
 const FLASH_INTERVAL = 500; // seconds
 
@@ -106,36 +109,35 @@ function App() {
 
   const gameNotStarted = !isGameOn && gameData.round === 0
   const gameOver = isGameOn && !gameData.isFlashing && !gameData.isUserPlaying && gameData.round > 0
+  const simonTurn = isGameOn && gameData.isFlashing
+  const playerTurn = isGameOn && gameData.isUserPlaying
+
 
   return (
     <div className="app-container">
+      <GameMessage simonTurn={simonTurn} playerTurn={playerTurn}/>
+      <div className="colors-container">
+        {colorList.map((color, colorIndex) => (
+          <ColorCard key={colorIndex}
+                     onClick={() => userClickHandle(color)}
+                     flash={flashColor === color}
+                     color={color}
+          />
+        ))}
+      </div>
 
-        <div className="colors-container">
-          {colorList.map((color, colorIndex) => (
-            <ColorCard key={colorIndex}
-              onClick={() => userClickHandle(color)}
-              flash={flashColor === color}
-              color={color}
-            />
-          ))}
-        </div>
+      {gameOver && (
+        <Restart gameData={gameData} onClick={restartGame}/>
+      )}
 
-        {gameOver && (
-          <div className="lost">
-            <div>You lost... Score: {gameData.round}</div>
-            <button onClick={restartGame}>Restart</button>
-          </div>
-        )}
+      {gameNotStarted && (
+        <StartButton onClick={startGame}/>
+      )}
 
-        {gameNotStarted && (
-          <button onClick={startGame} className="start-game-button">
-            Start
-          </button>
-        )}
+      {isGameOn && (
+        <RoundNumber gameData={gameData}/>
+      )}
 
-        {isGameOn && (
-          <div className="round">{gameData.round}</div>
-        )}
 
     </div>
   );
