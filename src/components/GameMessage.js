@@ -1,11 +1,15 @@
-export function GameMessage(props) {
+export function GameMessage({simonTurn, playerTurn, isGameOver}) {
   return <div>
-    {props.simonTurn && (
+    {simonTurn && (
       <div>Simon say...</div>
     )}
 
-    {props.playerTurn && (
+    {playerTurn && (
       <div>Now do as Simon said</div>
+    )}
+
+    {isGameOver && (
+      <div>The game is over</div>
     )}
   </div>;
 }
